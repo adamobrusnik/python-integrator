@@ -6,8 +6,6 @@ import xml.etree.ElementTree as ET
 from classes import *
 from functions import *
 
-
-
 eedf_filename = 'EEDFs.dat'
 eedfs_str = open(eedf_filename).read()
 eedfs = parseeedf(eedfs_str)

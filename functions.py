@@ -63,7 +63,8 @@ def xsams_cross(reactions_filename):
 
 		cross_section.x = xs
 		cross_section.y = ys	
-
+		cross_sections.append(cross_section)
+	return cross_sections
 
 def remove_namespace(doc, namespace=u'http://vamdc.org/xml/xsams/1.0'):
     """Remove namespace in the passed document in place."""

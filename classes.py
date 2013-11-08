@@ -23,9 +23,14 @@ class sigmaClass:
 		self.y = []
 	def __repr__(self):
 		return self.reaction + ' [' + self.reference + ']' 
-	def integrate(eedf):
-		eedf_x = eedf.x
-		eedf_y = eedf.y
-		sigma_x = self.x
-		sigma_y = self.y	
-		# TODO: integration to obtain rate coefficients	
+	def integrate(eedfs):
+		rate_y = []
+		for eedf in eedfs:
+			eedf_x = eedf.x
+			eedf_y = eedf.y
+			sigma_x = self.x
+			sigma_y = self.y	
+			# TODO: integration to obtain rate coefficients	
+
+			eedf_x_new = numpy.interp(sigma_x, eedf_x, eedf_y, LEFT=eedf_y[0], RIGHT=eedf_y[-1])
+			print eedf_x_new

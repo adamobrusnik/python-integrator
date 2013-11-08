@@ -62,17 +62,19 @@ def xsams_cross(reactions_filename):
 		ys = str_to_data(ydata)
 
 		cross_section.x = xs
-		cross_section.y = ys	
+		cross_section.y = ys
+		cross_section.description = desc
+		cross_section.reference = '??'
 		cross_sections.append(cross_section)
 	return cross_sections
 
 def remove_namespace(doc, namespace=u'http://vamdc.org/xml/xsams/1.0'):
-    """Remove namespace in the passed document in place."""
-    ns = u'{%s}' % namespace
-    nsl = len(ns)
-    for elem in doc.getiterator():
-        if elem.tag.startswith(ns):
-            elem.tag = elem.tag[nsl:]
+	"""Remove namespace in the passed document in place."""
+	ns = u'{%s}' % namespace
+	nsl = len(ns)
+	for elem in doc.getiterator():
+		if elem.tag.startswith(ns):
+			elem.tag = elem.tag[nsl:]
 
 def str_to_data(string, format = 'space-separated'):
 	if format == 'space-separated':

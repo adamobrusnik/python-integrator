@@ -2,11 +2,11 @@ import re, string
 import numpy as np
 import scipy.integrate as sp_int
 import xml.etree.ElementTree as ET
-
+import sys
 from classes import *
 from functions import *
 
-if len(sys.argv) != 2:
+if len(sys.argv) != 3:
 	raise IOError('Wrong number of arguments!!')
 
 eedf_filename = sys.argv[1]

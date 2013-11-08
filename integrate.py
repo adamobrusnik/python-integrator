@@ -9,11 +9,14 @@ from functions import *
 if len(sys.argv) != 2:
 	raise IOError('Wrong number of arguments!!')
 
-eedf_filename = 'EEDFs.dat'
+eedf_filename = sys.argv[1]
+reactions_filename = sys.argv[2]
+#eedf_filename = 'EEDFs.dat'
+#reactions_filename = 'aladdin.xml'
+
 eedfs_str = open(eedf_filename).read()
 eedfs = parseeedf(eedfs_str)
 
-reactions_filename = 'aladdin.xml'
 reactions = xsams_cross(reactions_filename)
 
 

@@ -28,9 +28,12 @@ def parseeedf(eedfs_str):
 				ys.append(y)
 
 		if len(xs) > 0:
+			xs = np.array(xs)
+			ys = np.array(ys)
 			current_eedf.x = xs
 			current_eedf.y = ys
-			emean = np.trapz(ys, xs)
+			integrand = xs * ys
+			emean = np.trapz(integrand, xs)
 			current_eedf.emean = emean
 			if eedf_lines[0] != '':
 				current_eedf.desc = eedf_lines[0]

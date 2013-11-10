@@ -40,21 +40,12 @@ class sigmaClass:
 			eedf_y = np.array(eedf.y)
 			sigma_x = np.array(self.x)
 			sigma_y = np.array(self.y)
-			# TODO: integration to obtain rate coefficients	
 
-			#eedf_x_new = np.interp(sigma_x, eedf_x, eedf_y, LEFT=eedf_y[0], RIGHT=eedf_y[-1])
 			f_eedf_interp = interpolate.interp1d(eedf_x, eedf_y, bounds_error=False, fill_value=0)
 			eedf_x_new = f_eedf_interp(2.1)
-			#print eedf_x_new
-			#integrand = [x*sigma_y for x in eedf_x_new]
-			#print sigma_x 
 			eedf_x_new = np.array(eedf_x_new)
 			integrand = eedf_x_new * sigma_y
-			#print eedf
-			#print sigma_x
-			#print integrand
 			i_rate = integrate.simps(integrand, sigma_x)
-			#print i_rate	
 			rate.append(i_rate)
 			emean.append(eedf.emean)
 		self.rate_x = emean

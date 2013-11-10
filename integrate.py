@@ -22,7 +22,7 @@ eedfs_str = open(eedf_filename).read()
 eedfs = parseeedf(eedfs_str)
 
 
-reactions = xsams_cross(reactions_filename)
+reactions = cross(reactions_filename)
 #print eedfs
 for reaction in reactions:
 	reaction.integrate(eedfs)

@@ -42,7 +42,7 @@ class sigmaClass:
 			sigma_y = np.array(self.y)
 
 			f_eedf_interp = interpolate.interp1d(eedf_x, eedf_y, bounds_error=False, fill_value=0)
-			eedf_x_new = f_eedf_interp(2.1)
+			eedf_x_new = f_eedf_interp(sigma_x)
 			eedf_x_new = np.array(eedf_x_new)
 			integrand = eedf_x_new * sigma_y
 			i_rate = integrate.simps(integrand, sigma_x)

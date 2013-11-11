@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import re, string, os, shutil
 import numpy as np
 import scipy.integrate as sp_int

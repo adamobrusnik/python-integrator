@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import re, string
 import numpy as np
 import scipy.integrate as sp_int
@@ -65,6 +66,8 @@ def xsams_cross(reactions_filename):
 		dataset = process.find('DataSets/DataSet/TabulatedData')
 		xdata = dataset.find('X/DataList').text
 		ydata = dataset.find('Y/DataList').text
+		xunit = dataset.find('X').attrib['units']
+		yunit = dataset.find('Y').attrib['units']
 		desc = process.find('ProcessClass/UserDefinition').text
 		desc = '[k' + str(i) + '] ' + desc
 		i = i+1	
@@ -76,8 +79,8 @@ def xsams_cross(reactions_filename):
 		xs = str_to_data(xdata)
 		ys = str_to_data(ydata)
 
-		cross_section.x = xs
-		cross_section.y = ys
+		cross_section.x = convert_units(xs, xunit, 'eV')
+		cross_section.y = convert_units(ys, yunit, 'm2')
 		cross_section.description = desc
 		cross_section.reference = '??'
 		cross_sections.append(cross_section)
@@ -102,7 +105,14 @@ def bolsig_cross(reactions_filename):
 		readout = 0
 		xs = []
 		ys = []	
+		unit_xs = 'eV'
+		unit_ys = 'm2'
 		for line in lines:
+			if line[0:7] == 'COLUMN1':
+				unit_xs = line.split(' ')[-1]
+			if line[0:7] == 'COLUMN2':
+				unit_ys = line.split(' ')[-1]
+
 			#print line
 			if readout == 0 and line[0:5] == '-----':
 				#print 'readout started'
@@ -116,8 +126,8 @@ def bolsig_cross(reactions_filename):
 				ys.append(float(elements[1]))	
 		cross_section = sigmaClass()
 		if len(xs) > 0:
-			cross_section.x = xs
-			cross_section.y = ys
+			cross_section.x = convert_units(xs, unit_xs, 'eV')
+			cross_section.y = convert_units(ys, unit_ys, 'm2')
 			cross_section.description = desc 
 			cross_section.reaction = reaction_process 
 			cross_section.reference = '??'
@@ -144,3 +154,28 @@ def str_to_data(string, format = 'space-separated'):
 				num_arr.append(float(ar))
 		return num_arr	
 
+def convert_units(number_list, unit_from_in, unit_to_in):
+	unit_from = unit_from_in.replace('^', '').replace('[', '').replace(']', '').replace('\r', '').replace(' ', '').replace('\n', '')
+	unit_to = unit_to_in.replace('^', '').replace('[', '').replace(']', '').replace('\r', '').replace(' ', '').replace('\n', '')
+	#print str(type(unit_from)) + '\t' + str(len(unit_from)) + '\t' + unit_from
+	#print str(type(unit_to)) + '\t' + str(len(unit_to)) + '\t' + unit_to
+	K = 1
+	
+	if unit_from == 'cm2' and unit_to == 'm2':
+		K = 1e-4
+	elif unit_from == 'm2' and unit_to == 'cm2':
+		K = 1e4
+	elif unit_from == 'K' and unit_to == 'eV':
+		K = 1/11604
+	elif unit_from == 'eV' and unit_to == 'K':
+		K = 11604
+	elif str(unit_from) == str(unit_to):
+		#print bcolors.WARNING + 'Unit identity' + bcolors.ENDC
+		pass
+	else:
+		print 'Unit conversion from ' , str(unit_from), ' to ' , str(unit_to), ' is not defined'
+
+	for i in xrange(0, len(number_list)):
+		number_list[i] = K*number_list[i]
+	
+	return number_list

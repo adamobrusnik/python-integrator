@@ -89,9 +89,8 @@ def bolsig_cross(reactions_filename):
 	for reaction_type in reaction_types:
 		contents = contents.replace(reaction_type, '<s>\n' + reaction_type)
 	reaction_strings = contents.split('<s>')
-	i = 0
+	i = 1
 	for reaction_string in reaction_strings:
-		i=i+1
 		#print '$$$$$$$$$$$$$$$$$$$$$$$'
 		reaction_string = '\n'+reaction_string.replace('\n\n', '\n').replace('\n\n', '\n')
 		lines = reaction_string.split('\n')
@@ -116,14 +115,13 @@ def bolsig_cross(reactions_filename):
 				ys.append(float(elements[1]))	
 		cross_section = sigmaClass()
 		if len(xs) > 0:
-			print xs
-			print ys
 			cross_section.x = xs
 			cross_section.y = ys
 			cross_section.description = desc 
 			cross_section.reaction = reaction_process 
 			cross_section.reference = '??'
 			cross_sections.append(cross_section)
+			i=i+1
 	return cross_sections
 
 

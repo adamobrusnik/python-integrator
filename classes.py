@@ -5,6 +5,9 @@ import xml.etree.ElementTree as ET
 from scipy import interpolate
 from scipy import integrate
 
+from constants import *
+import matplotlib.pyplot as plt
+
 class eedfClass:
 	def __init__(self):
 		self.x = []
@@ -33,23 +36,68 @@ class sigmaClass:
 	def __repr__(self):
 		return self.description + ' ' + self.reaction + ' [' + self.reference + ']' 
 	def integrate(self, eedfs):
+		gamma = np.sqrt(2*QE/ME)
 		emean = []
 		rate = []
+		i = 0
+		
 		for eedf in eedfs:
+			i=i+1
 			eedf_x = np.array(eedf.x)
 			eedf_y = np.array(eedf.y)
 			sigma_x = np.array(self.x)
 			sigma_y = np.array(self.y)
-
-			f_eedf_interp = interpolate.interp1d(eedf_x, eedf_y, bounds_error=False, fill_value=0)
-			eedf_x_new = f_eedf_interp(sigma_x)
-			eedf_x_new = np.array(eedf_x_new)
-			integrand = eedf_x_new * sigma_y
-			i_rate = integrate.simps(integrand, sigma_x)
-			rate.append(i_rate)
-			emean.append(eedf.emean)
+			idx = sigma_x.searchsorted(eedf_x[-1])
+		
+			#print '-----'
+			#print eedf_x[-1]
+			#print sigma_x[0]
+			#print idx	
+			sigma_x = sigma_x[0:idx]
+			sigma_y = sigma_y[0:idx]
+			if len(sigma_x) > 2:
+				f_sigma_interp = interpolate.UnivariateSpline(sigma_x, sigma_y, bbox=[sigma_x[0], sigma_x[-1]], k=1, s=0)
+				#f_sigma_interp = interpolate.interp1d(sigma_x, sigma_y, kind='cubic')
+				interpolated = f_sigma_interp(eedf_x).clip(min=0)
+				#if sigma_y[0] == 0.0:
+				#	idxx = sigma_x.searchsorted(eedf_x[0])
+				#	sigma_y[0:idxx] = 0	
+				"""	
+				if i == len(eedfs)-1:
+					plt.figure()
+					plt.plot(sigma_x, sigma_y, 'ro')
+					t = np.arange(0, eedf_x[-1], 0.01)
+					vals = f_sigma_interp(t).clip(min=0)
+					if sigma_y[0] == 0.0:
+						idxx = t.searchsorted(eedf_x[0])
+						vals[0:idxx] = 0		
+					plt.plot(t, vals)
+					plt.yscale('log')
+					plt.xscale('log')
+					plt.axis()
+					plt.show()
+				"""	
+				#integrand = np.power(eedf_x, 1.5) * eedf_y * interpolated
+				integrand = np.power(eedf_x, 1.0) * eedf_y * interpolated 
+				i_rate = integrate.simps(integrand, np.power(eedf_x, 1))
+				rate.append(gamma*i_rate)
+				emean.append(eedf.emean)
+			else:
+				print 'Cross section out of range'
+				rate.append(0)
+				emean.append(eedf.emean)
 		self.rate_x = emean
 		self.rate_y = rate
+		"""
+		plt.figure()
+		plt.plot(emean, rate, 'ro')
+		plt.show()
+		"""
+	def mb_integrate(self, T):
+		E = self.sigma_x
+		MBDF = 2*np.sqrt(E/pi) * np.power(kb*T, -1.5) * exp(-E/(kb*T))
+		
+
 	def get_rate_string(self, delimiter='\t', comment='%'):
 		final_string = ''
 		final_string += comment + ' ' + self.description + '\n'

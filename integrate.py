@@ -28,13 +28,13 @@ for reaction in reactions:
 	reaction.integrate(eedfs)
 	#print reaction.rate_x
 	#print reaction.rate_y
-	"""
+	
 	plt.figure()
 	plt.title(reaction.description + ' - reaction rate')
 	plt.xlabel('Mean energy [eV]')
 	plt.ylabel('Rate Coefficient [1/(m^3*s)]')
 	plt.plot(reaction.rate_x, reaction.rate_y)
 	plt.savefig('results/' + reaction.description + '.png')
-	"""
+	
 	tosave = reaction.get_rate_string()
 	handle = open('results/' + reaction.description + '.dat', 'w').write(tosave)

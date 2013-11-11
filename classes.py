@@ -45,6 +45,8 @@ class sigmaClass:
 			i=i+1
 			eedf_x = np.array(eedf.x)
 			eedf_y = np.array(eedf.y)
+			t = np.arange(0, eedf_x[-1], 0.01)
+			#t = np.arange(0, 1500, 0.01)
 			sigma_x = np.array(self.x)
 			sigma_y = np.array(self.y)
 			idx = sigma_x.searchsorted(eedf_x[-1])
@@ -57,11 +59,11 @@ class sigmaClass:
 			sigma_y = sigma_y[0:idx]
 			if len(sigma_x) > 2:
 				f_sigma_interp = interpolate.UnivariateSpline(sigma_x, sigma_y, bbox=[sigma_x[0], sigma_x[-1]], k=1, s=0)
+				f_eedf_interp = interpolate.UnivariateSpline(eedf_x, eedf_y, bbox=[eedf_x[0], eedf_x[-1]], k=1, s=0)
 				#f_sigma_interp = interpolate.interp1d(sigma_x, sigma_y, kind='cubic')
-				interpolated = f_sigma_interp(eedf_x).clip(min=0)
-				#if sigma_y[0] == 0.0:
-				#	idxx = sigma_x.searchsorted(eedf_x[0])
-				#	sigma_y[0:idxx] = 0	
+				#interpolated = f_sigma_interp(eedf_x).clip(min=0)
+				sigma_interpolated = f_sigma_interp(t).clip(min=0)
+				eedf_interpolated = f_eedf_interp(t).clip(min=0)
 				"""	
 				if i == len(eedfs)-1:
 					plt.figure()
@@ -78,8 +80,11 @@ class sigmaClass:
 					plt.show()
 				"""	
 				#integrand = np.power(eedf_x, 1.5) * eedf_y * interpolated
-				integrand = np.power(eedf_x, 1.0) * eedf_y * interpolated 
-				i_rate = integrate.simps(integrand, np.power(eedf_x, 1))
+				#integrand = np.power(eedf_x, 1.0) * eedf_y * interpolated 
+				integrand = sigma_interpolated 
+				integrand = eedf_interpolated * t * sigma_interpolated
+				#i_rate = integrate.simps(integrand,eedf_x)
+				i_rate = integrate.simps(integrand, t)
 				rate.append(gamma*i_rate)
 				emean.append(eedf.emean)
 			else:

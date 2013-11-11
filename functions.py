@@ -7,6 +7,7 @@ import xml.etree.ElementTree as ET
 from classes import *
 
 def parseeedf(eedfs_str):
+	""" parses an eedf from bolsig-exported string. Returns a list of eedfClass objects"""
 	eedfs_str = eedfs_str.replace('\n\r', '\n').replace('\r\n', '\n')
 	eedfs = eedfs_str.split('\n\n')
 	eedfs_array = []
@@ -43,6 +44,7 @@ def parseeedf(eedfs_str):
 	return eedfs_array
 
 def cross(reactions_filename):
+	""" a wrapper function for cross section import"""
 	arr = reactions_filename.split('.')
 	extension = arr[-1]
 	if extension == 'xml':
@@ -91,7 +93,6 @@ def bolsig_cross(reactions_filename):
 	reaction_strings = contents.split('<s>')
 	i = 1
 	for reaction_string in reaction_strings:
-		#print '$$$$$$$$$$$$$$$$$$$$$$$'
 		reaction_string = '\n'+reaction_string.replace('\n\n', '\n').replace('\n\n', '\n')
 		lines = reaction_string.split('\n')
 		reaction_type = lines[1]
@@ -134,6 +135,7 @@ def remove_namespace(doc, namespace=u'http://vamdc.org/xml/xsams/1.0'):
 			elem.tag = elem.tag[nsl:]
 
 def str_to_data(string, format = 'space-separated'):
+	""" converts a list of values in a string to a list of numbers"""
 	if format == 'space-separated':
 		arr = string.split(' ')
 		num_arr = []

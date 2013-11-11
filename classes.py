@@ -8,6 +8,22 @@ from scipy import integrate
 from constants import *
 import matplotlib.pyplot as plt
 
+class bcolors:
+	HEADER = '\033[95m'
+	OKBLUE = '\033[94m'
+	OKGREEN = '\033[92m'
+	WARNING = '\033[93m'
+	FAIL = '\033[91m'
+	ENDC = '\033[0m'
+
+	def disable(self):
+		self.HEADER = ''
+		self.OKBLUE = ''
+		self.OKGREEN = ''
+		self.WARNING = ''
+		self.FAIL = ''
+		self.ENDC = ''
+
 class eedfClass:
 	def __init__(self):
 		self.x = []
@@ -36,6 +52,7 @@ class sigmaClass:
 	def __repr__(self):
 		return self.description + ' ' + self.reaction + ' [' + self.reference + ']' 
 	def integrate(self, eedfs):
+		""" integrates the cross section with the given EEDF. Takes an eedfClass object as input"""
 		gamma = np.sqrt(2*QE/ME)
 		emean = []
 		rate = []
@@ -55,7 +72,7 @@ class sigmaClass:
 			if len(sigma_x) > 2:
 				f_sigma_interp = interpolate.UnivariateSpline(sigma_x, sigma_y, bbox=[sigma_x[0], sigma_x[-1]], k=1, s=0)
 				f_eedf_interp = interpolate.UnivariateSpline(eedf_x, eedf_y, bbox=[eedf_x[0], eedf_x[-1]], k=1, s=0)
-				sigma_interpolated = f_sigma_interp(t).clip(min=0)
+       				sigma_interpolated = f_sigma_interp(t).clip(min=0)
 				eedf_interpolated = f_eedf_interp(t).clip(min=0)
 				"""	
 				if i == len(eedfs)-1:

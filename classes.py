@@ -45,23 +45,16 @@ class sigmaClass:
 			i=i+1
 			eedf_x = np.array(eedf.x)
 			eedf_y = np.array(eedf.y)
-			t = np.arange(0, eedf_x[-1], 0.01)
-			#t = np.arange(0, 1500, 0.01)
+			t = np.arange(0, eedf_x[-1], 0.01) # new x-points for interpolation of both sigma and the eedf
 			sigma_x = np.array(self.x)
 			sigma_y = np.array(self.y)
 			idx = sigma_x.searchsorted(eedf_x[-1])
 		
-			#print '-----'
-			#print eedf_x[-1]
-			#print sigma_x[0]
-			#print idx	
 			sigma_x = sigma_x[0:idx]
 			sigma_y = sigma_y[0:idx]
 			if len(sigma_x) > 2:
 				f_sigma_interp = interpolate.UnivariateSpline(sigma_x, sigma_y, bbox=[sigma_x[0], sigma_x[-1]], k=1, s=0)
 				f_eedf_interp = interpolate.UnivariateSpline(eedf_x, eedf_y, bbox=[eedf_x[0], eedf_x[-1]], k=1, s=0)
-				#f_sigma_interp = interpolate.interp1d(sigma_x, sigma_y, kind='cubic')
-				#interpolated = f_sigma_interp(eedf_x).clip(min=0)
 				sigma_interpolated = f_sigma_interp(t).clip(min=0)
 				eedf_interpolated = f_eedf_interp(t).clip(min=0)
 				"""	
@@ -79,16 +72,13 @@ class sigmaClass:
 					plt.axis()
 					plt.show()
 				"""	
-				#integrand = np.power(eedf_x, 1.5) * eedf_y * interpolated
-				#integrand = np.power(eedf_x, 1.0) * eedf_y * interpolated 
 				integrand = sigma_interpolated 
 				integrand = eedf_interpolated * t * sigma_interpolated
-				#i_rate = integrate.simps(integrand,eedf_x)
 				i_rate = integrate.simps(integrand, t)
 				rate.append(gamma*i_rate)
 				emean.append(eedf.emean)
 			else:
-				print 'Cross section out of range'
+				#print 'Cross section out of range'
 				rate.append(0)
 				emean.append(eedf.emean)
 		self.rate_x = emean

@@ -1,0 +1,35 @@
+%%%%%%%%%%%%% All electron reactions %%%%%%%%%%%%%%
+% ke1:  e + H -> e + H
+% ke2:  e + H -> e + H(2s)(10.2eV)
+% ke3:  e + H -> e + H(2p)(10.2eV)
+% ke4:  e + H -> 2e + H^+
+% ke5:  e + H2 -> e + H2
+% ke6:  e + H2 -> e + H2(j0-2)(0.044eV)
+% ke7:  e + H2 -> e + H2(j1-3)(0.073ev)
+% ke8:  e + H2 -> e + H2(V1)(0.516eV)
+% ke9:  e + H2 -> e + H2(V2)(1.00eV)
+% ke10: e + H2 -> e + H2(V3)(1.5eV)
+% ke11: e + H2 -> e + H2(B3SIGMA)(8.9eV)
+% ke12: e + H2 -> e + H2(B1SIGMA)(11.3eV)
+% ke13: e + H2 -> e + H2(C3PI)(11.75eV)
+% ke14: e + H2 -> e + H2(A3SIGMA)(11.80eV)
+% ke15: e + H2 -> e + H2(C1PI)(12.40eV)
+% ke16: e + H2 -> e + H2(G1SIG)(13.86eV)
+% ke17: e + H2 -> e + H2(D3PI)(14.0eV)
+% ke18: e + H2 -> e + H2*(15.00eV)
+% ke19: e + H2 -> e + H2(Rydberg)(15.20eV)
+% ke20: e + H2 -> e + e + H2^+
+% ke21: e + H2 -> e + H2*(16.60eV)
+
+
+
+% ke22: e + H_2^+ -> e + H + H^+ 
+% ke23: e + H_2^+ -> e + H(n=2) + H^+ 
+% ke24: e + H_2^+ -> H + H(n>1)
+
+% ke25: e + H(n=2) -> 2e + H^+
+% ke26: e + H(n=3) -> 2e + H^+
+% ke27: e + H(n=2) -> e + H(n=3)
+
+% ke28: e + H3p -> 3H 			% this is probably quite improbable
+%		-> H(n=2) + H_2

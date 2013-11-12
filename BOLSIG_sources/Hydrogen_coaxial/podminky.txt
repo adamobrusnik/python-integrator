@@ -1,0 +1,12 @@
+p		=	100 Pa
+Tg		=	1500 K
+N		=	5e21 m^-3
+omega		=	2.45e9 Hz
+ne		=	5e18 m^-3	(z prezentace Manuel Jimenez)
+---------------------------------
+Mean energy: 	=	0.01 -- 15 eV
+omega/N		=	5e-13
+WITHOUT ELECTON-ELECTRON COLLISIONS
+
+w_H2		=	0.95
+w_H		=	0.05
